@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Mahfuz Ahmed Anik - AI Researcher focusing on Intelligent Healthcare, Digital Twins, and Agentic AI">
+    <title>Mahfuz Ahmed Anik | AI Researcher</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- React & ReactDOM (UMD) -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <!-- Babel Standalone for in-browser JSX/TS compilation -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Tailwind Configuration -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              serif: ['Playfair Display', 'serif'],
+            },
+            colors: {
+              brand: {
+                dark: '#0f172a',
+                primary: '#2563eb',
+                accent: '#3b82f6',
+              }
+            }
+          },
+        },
+      }
+    </script>
+    
+    <style>
+      /* Custom scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+      }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body class="bg-slate-50 text-slate-800 antialiased selection:bg-blue-100 selection:text-blue-900">
+    <div id="root"></div>
+
+    <!-- Main Application Script -->
+    <script type="text/babel" data-presets="typescript,react">
+      const { useState, useEffect } = React;
+
+      // ==========================================
+      // TYPES
+      // ==========================================
+      interface SocialLink {
+        name: string;
+        url: string;
+        icon: string;
+        color: string;
+      }
+
+      interface ResearchInterest {
+        title: string;
+        icon: string;
+        description: string[];
+      }
+
+      interface ExperienceItem {
+        role: string;
+        organization: string;
+        orgUrl?: string;
+        period: string;
+        description: string;
+      }
+
+      interface LinkItem {
+        name: string;
+        url: string;
+      }
+
+      interface PublicationItem {
+        title: string;
+        authors: string;
+        venue: string;
+        links?: LinkItem[];
+        note?: string;
+      }
+
+      interface ProjectItem {
+        title: string;
+        description: string;
+        imageUrl: string;
+        icon: string;
+      }
+
+      interface AchievementItem {
+        title: string;
+        detail?: string;
+        url?: string;
+      }
+
+      interface TrainingItem {
+        name: string;
+        url?: string;
+      }
+
+      interface EducationItem {
+        degree: string;
+        institution: string;
+        period: string;
+        major: string;
+        result: string;
+        courses?: string;
+      }
+
+      // ==========================================
+      // CONSTANTS
+      // ==========================================
+      const SOCIAL_LINKS: SocialLink[] = [
+        { name: 'GitHub', url: 'https://github.com/ono1025', icon: 'fa-brands fa-github', color: 'bg-slate-800' },
+        { name: 'LinkedIn', url: 'https://www.linkedin.com/in/mahfuz-ahmed-anik-a5a6b5215/', icon: 'fa-brands fa-linkedin', color: 'bg-blue-700' },
+        { name: 'Kaggle', url: 'https://www.kaggle.com/mahfuzahmedanik', icon: 'fa-brands fa-kaggle', color: 'bg-sky-500' },
+        { name: 'OpenReview', url: 'https://openreview.net/profile?id=%7EMahfuz_Ahmed_Anik1', icon: 'fa-solid fa-bolt', color: 'bg-red-800' },
+        { name: 'arXiv', url: 'https://arxiv.org/abs/2504.03692', icon: 'fa-solid fa-flask', color: 'bg-red-600' },
+        { name: 'Google Scholar', url: 'https://scholar.google.com/citations?user=FQcncXEAAAAJ&hl=en&authuser=1', icon: 'fa-solid fa-graduation-cap', color: 'bg-blue-600' },
+        { name: 'Semantic Scholar', url: 'https://www.semanticscholar.org/author/Mahfuz-Ahmed-Anik/2349239770', icon: 'fa-solid fa-book', color: 'bg-slate-600' },
+        { name: 'ACL Anthology', url: 'https://aclanthology.org/people/mahfuz-ahmed-anik/', icon: 'fa-solid fa-layer-group', color: 'bg-red-700' },
+        { name: 'DBLP', url: 'https://dblp.org/pid/401/7845.html', icon: 'fa-solid fa-database', color: 'bg-amber-600' },
+        { name: 'ORCID', url: 'https://orcid.org/my-orcid?orcid=0009-0007-6826-7018', icon: 'fa-brands fa-orcid', color: 'bg-green-600' },
+      ];
+
+      const RESEARCH_INTERESTS: ResearchInterest[] = [
+        {
+          title: "AI-Driven Operations Research & Healthcare Systems",
+          icon: "fa-solid fa-heart-pulse",
+          description: [
+            "Focusing on optimization-aware healthcare systems (LP, convex optimization, discrete optimization, simulation) where predictive ML models directly connect to resource allocation and scheduling decisions.",
+            "Interested in computational oncology, exploring how generative + graph models can reason over metabolic pathways to support cancer insights in precision medicine.",
+            "Applying Digital Twins to evaluate alternative policies in hospitals and clinical operations before real deployment, enabling safer, low-risk system experimentation.",
+            "Exploring computer vision pipelines (e.g., fracture localization, disease classification) to support medical image understanding and early clinical screening."
+          ]
+        },
+        {
+          title: "Intelligent Supply-Chain, Transportation & Logistics",
+          icon: "fa-solid fa-truck-fast",
+          description: [
+            "Using optimization frameworks for routing, replenishment, multimodal transport, and facility-level decisions, especially where OR + ML fusion outperforms static planning.",
+            "Designing spatiotemporal forecasting models for supply-chain networks, including graph-based diffusion and virtual-node augmentation for capturing upstream/downstream dependencies.",
+            "Exploring sustainability-aware supply chain modeling, including digital-twin based scenario testing for resilience, carbon-efficiency, and robustness under disruption.",
+            "Building end-to-end decision-intelligent supply-chain systems that are adaptive, interpretable, and industry-deployable."
+          ]
+        },
+        {
+          title: "Human-Factors & Human-Centred AI",
+          icon: "fa-solid fa-people-group",
+          description: [
+            "Working on modelling human workload, error patterns, and interaction behaviour to design safer, more intuitive AI interfaces for high-risk environments.",
+            "Interested in adaptive, multilingual agentic AI systems that collaborate with humans through reasoning, explanation, and trust calibration in real workflows.",
+            "Exploring ethics, inclusivity, and socio-technical alignment ensuring AI systems respect cultural context, equitable access, and human agency.",
+            "Studying human-in-the-loop digital twins to evaluate ergonomics, safety, and user acceptance before deploying AI into real operational systems."
+          ]
+        }
+      ];
+
+      const EXPERIENCE: ExperienceItem[] = [
+        {
+          role: "Research Associate",
+          organization: "Computational Intelligence and Operations Laboratory (CIOL)",
+          orgUrl: "https://ciol-researchlab.github.io/",
+          period: "Sept 2024 – Present",
+          description: "A community-driven research lab advancing AI and ML applications in industrial systems, Digital Twin, and interdisciplinary domains. Engaged in machine learning and deep learning research, participating in international competitions. Currently working on projects in Agentic AI, healthcare, and Graph Neural Networks. Collaborating with Prof. A.M.M. Mukaddes (SUST), Prof. Manjurul Ahsan (OU), and Prof. Mahathir M. Bappy (LSU)."
+        },
+        {
+          role: "Industrial Attachment",
+          organization: "Walton Hi-Tech Industries PLC",
+          orgUrl: "https://waltonbd.com/",
+          period: "May 2025",
+          description: "Worked under the Process Development Department of the Electrical Appliance Products (EAP) Unit. Focused on manufacturing process optimization for LED lights, fans, and switch sockets. Gained experience in production line analysis, quality control systems, Lean tools (KANBAN, 5S, PDCA), and proposed data-driven process improvements."
+        },
+        {
+          role: "Content Representative",
+          organization: "Shabash Fakibaj (LLC)",
+          orgUrl: "https://www.shabashfakibaj.com/",
+          period: "Dec 2022 – January 2025",
+          description: "A multinational educational organization that provides guidance on graduate studies abroad for undergraduate students. I served as a content representative, collaborating with three teams, the schedule management team, the caption-writing team, and the LinkedIn team. My responsibility was to coordinate across these teams, ensure effective communication, and report overall progress. This role significantly helps me to strengthened my communication and teamwork abilities, as it required extensive interaction with diverse groups of people."
+        },
+        {
+          role: "Executive Member",
+          organization: "RoboSUST",
+          period: "February 2020 – February 2021",
+          description: "Participated in the SUST Robotics Club, gaining hands-on experience with Arduino and basic robotics, including a line-following robot competition and team-based projects."
+        },
+        {
+          role: "Organizer",
+          organization: "Graduate Development Network (GDN-SUST)",
+          period: "March 2020 – February 2021",
+          description: "Contributed to organizing university-wide seminars and career development programs at SUST, coordinating communication among speakers, attendees, and organizing teams."
+        }
+      ];
+
+      const EDUCATION: EducationItem[] = [
+        {
+          degree: "Bachelor of Science (Engineering)",
+          institution: "Shahjalal University of Science and Technology",
+          period: "February 2020 - August 2025",
+          major: "Industrial and Production Engineering",
+          result: "CGPA: 3.80/4.00 (Rank among top 5% students)",
+          courses: "MAT103G, IPE141: Manufacturing Process-I, IPE123: Engineering Materials, SOC101G: Principles of Sociology, Differential Calculus and Solid Geometry, MAT104G: Integral Calculus and Differential Equations, MAT207G: Vectors, Matrices and Laplace Transformation, CSE203G: Introduction to Computer Language, IPE251: Engineering Statistics, IPE321: Numerical Analysis, IPE339: Operations Research, IPE 333: Quality Control and Management, IPE353: Facilities Planning and Materials Handling, IPE331: Ergonomics and Industrial Safety, IPE335: Industrial Management, IPE337: Operations Management, IPE437: Organizational Behavior, IPE431: System Modeling and Simulation, IPE439: Production System Optimization, IPE443: Advance Manufacturing System, IPE433: Supply Chain Management, IPE435: Project Management, IPE434: Reliability Engineering and Maintenance Management"
+        },
+        {
+          degree: "Higher Secondary Certificate",
+          institution: "Murari Chand College, Sylhet, Bangladesh",
+          period: "July 2017 - July 2019",
+          major: "Science",
+          result: "Result: GPA 5.00/5.00"
+        },
+        {
+          degree: "Secondary School Certificate",
+          institution: "Sylhet Government Pilot High School, Bangladesh",
+          period: "January 2007 - March 2017",
+          major: "Science",
+          result: "Result: GPA 5.00/5.00"
+        }
+      ];
+
+      // ======================== PUBLICATIONS DATA ========================
+
+      const PUBLICATIONS_JOURNAL: PublicationItem[] = [
+        {
+          title: "Fracture Finder: Computer-Aided Real-Time Diagnosis of Vertebral Fractures in Thoracic Spine X-Rays Using YOLOv8 with Weighted Box Fusion and Augmentation Strategies",
+          authors: "MD Shafikul Islam, Mahfuz Ahmed Anik, Azmine Toushik Wasi, Dr. Mahathir Mohammad Bappy",
+          venue: "IISE Transactions on Healthcare Systems Engineering (Q2)",
+          note: "Finalists for the QCRE Data Challenge competition, IISE 2025."
+        }
+      ];
+
+      const PUBLICATIONS_CONFERENCE: PublicationItem[] = [
+        {
+          title: "Knowledge Explorer: An Agentic AI Framework for Interactive, Personalized and Multilingual Learning Experience",
+          authors: "Wahid Faisal*, Azmine Toushik Wasi*, Drishti Sharma*, Mahfuz Ahmed Anik, Taki Hasan Rafi, Dong-Kyu Chae",
+          venue: "CSCW'25 Posters"
+        }
+      ];
+
+      const PUBLICATIONS_WORKSHOP: PublicationItem[] = [
+        {
+          title: "Preserving Cultural Identity with Context-Aware Translation Through Multi-Agent AI Systems",
+          authors: "Mahfuz Ahmed Anik, Abdur Rahman, Azmine Toushik Wasi, Md Manjurul Ahsan",
+          venue: "LM4UC Workshop at NAACL 2025",
+          links: [
+            { name: "PDF", url: "https://arxiv.org/pdf/2503.04827" },
+            { name: "Code", url: "https://github.com/ono1025/Context-Aware_Translation_MAS" }
+          ]
+        },
+        {
+          title: "Akatsuki-CIOL@DravidianLangTech 2025: Ensemble-Based Approach Using Pre-Trained Models for Fake News Detection in Dravidian Languages",
+          authors: "Mahfuz Ahmed Anik, Md. Iqramul Hoque, Wahid Faisal, Azmine Toushik Wasi, Md Manjurul Ahsan",
+          venue: "DravidianLangTech Workshop at NAACL 2025",
+          links: [
+            { name: "PDF", url: "https://openreview.net/pdf?id=XQ1fJ0rySf" },
+            { name: "Code", url: "https://github.com/ono1025/NAACL25-Akatsuki-Fake-News-Detection" }
+          ]
+        },
+        {
+          title: "CIOL at SemEval-2025 Task 11: Multilingual Pre-trained Model Fusion for Text-based Emotion Recognition",
+          authors: "Md. Iqramul Hoque, Mahfuz Ahmed Anik, Abdur Rahman, Azmine Toushik Wasi",
+          venue: "SemEval Workshop at ACL 2025",
+          links: [
+            { name: "PDF", url: "https://aclanthology.org/2025.semeval-1.29/" },
+            { name: "Code", url: "https://github.com/ono1025/-Multilingual-Pre-trained-Model-Fusion-for-Text-based-Emotion-Recognition" }
+          ]
+        },
+        {
+          title: "Pathway-Attentive GAN for Interpretable Biomolecular Design",
+          authors: "Azmine Toushik Wasi, Mahfuz Ahmed Anik",
+          venue: "ML for Genomics Explorations Workshop, ICLR 2025",
+          links: [
+            { name: "PDF", url: "https://openreview.net/forum?id=aDqhVBvHHZ" }
+          ]
+        },
+        {
+          title: "Risks and Safety Considerations for Foundation Model-based Autonomous Agents’ Interaction with the Environment",
+          authors: "Azmine Toushik Wasi, Mahfuz Ahmed Anik, Riashat Islam",
+          venue: "Foundation Models in the Wild Workshop, ICLR 2025",
+          links: [
+            { name: "PDF", url: "https://openreview.net/forum?id=1s1iI6wyfT" }
+          ]
+        },
+        {
+          title: "CIOLat CLPsych 2025: Using Large Language Models for Understanding and Summarizing Clinical Texts",
+          authors: "Md. Iqramul Hoque, Mahfuz Ahmed Anik, Azmine Toushik Wasi",
+          venue: "CLPsych Workshop at NAACL 2025",
+          links: [
+            { name: "PDF", url: "https://aclanthology.org/2025.clpsych-1.19/" }
+          ]
+        },
+        {
+          title: "Social Impact of AI: Research, Diversity, and Inclusion Frameworks",
+          authors: "Mahfuz Ahmed Anik, Abdur Rahman, Azmine Toushik Wasi, Md Manjurul Ahsan",
+          venue: "Short Papers and Posters Track, SIAI-ReDI 2025 at AAAI",
+          links: [
+            { name: "PDF", url: "https://link.springer.com/chapter/10.1007/978-3-031-98949-0_5" }
+          ]
+        }
+      ];
+
+      const PUBLICATIONS_POSTER: PublicationItem[] = [
+        {
+          title: "Stages of Integrating Digital Twin in Fused Deposition Modelling",
+          authors: "Abdur Rahman, Azmine Toushik Wasi, Mahfuz Ahmed Anik, and Md Manjurul Ahsan",
+          venue: "Accepted for Poster Presentation, DigiTwin for MSSR 2024 – Digital Twin for Manufacturing Sustainability, Safety, and Resilience, West Lafayette, Indiana, USA"
+        },
+        {
+          title: "Sustainable Management of Rare Earth Elements for Clean Energy Using Prescriptive Digital Twins",
+          authors: "Mahfuz Ahmed Anik, Iqramul Hoque, Md Shafikul Islam, Azmine Toushik Wasi, Md Manjurul Ahsan, Mahathir Mohammad Bappy",
+          venue: "Accepted for Poster Presentation, DigiTwin for MSSR 2024 – Digital Twin for Manufacturing Sustainability, Safety, and Resilience, West Lafayette, Indiana, USA"
+        }
+      ];
+
+      const PUBLICATIONS_REVIEW: PublicationItem[] = [
+        {
+          title: "GRAPHINE: Enhancing Spatiotemporal Supply Chain Forecasting Using Virtual Node-Augmented Graph Diffusion Recurrent Networks",
+          authors: "Azmine Toushik Wasi, Mahfuz Ahmed Anik, MD Shafikul Islam, Abdulelah S. Alshehri",
+          venue: "In Review, International Journal of Production Research (IJPR, Q1)"
+        },
+        {
+          title: "SpatiaLab: Can Vision–Language Models Perform Spatial Reasoning in the Wild?",
+          authors: "Azmine Toushik Wasi, Wahid Faisal, Abdur Rahman, Mahfuz Ahmed Anik, Munem Shahriar, Mohsin Mahmud Topu, Sadia Tasnim Meem, Rahatun Nesa Priti, Sabrina Afroz Mitu, Md. Iqramul Hoque, Shahriyar Zaman Ridoy, Mohammed Eunus Ali, Majd Hawasly, Mohammad Raza, Md Rizwan Parvez",
+          venue: "In Review, ICLR'26"
+        },
+        {
+          title: "Exploring Graph-based Digital Twins for Supply Chain Management and Optimization",
+          authors: "Azmine Toushik Wasi*, Mahfuz Ahmed Anik*, Abdur Rahman, Md. Iqramul Hoque, MD Shafikul Islam, MD Manjurul Ahsan",
+          venue: "In Review, Internet of Things (IoT, Q1)",
+          links: [
+            { name: "Arxiv", url: "https://arxiv.org/pdf/2504.03692" }
+          ]
+        },
+        {
+          title: "Digital Twin-based Multi-Agent Framework for Understanding and Optimizing Smart Building HVAC Systems",
+          authors: "Mahfuz Ahmed Anik*, Azmine Toushik Wasi*, Abdur Rahman, MD Manjurul Ahsan",
+          venue: "In Review, Computers in Electrical Engineering (Q1)",
+          links: [
+            { name: "SSRN", url: "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=FQcncXEAAAAJ&authuser=1&citation_for_view=FQcncXEAAAAJ:qjMakFHDy7sC" }
+          ]
+        },
+        {
+          title: "Digital Twin-Based Traffic Management in Dhaka Using Deep Learning Object Detection",
+          authors: "Mahfuz Ahmed Anik, Azmine Toushik Wasi, Abdur Rahman, Md. Iqramul Hoque, Dr. Abul Mukid Mohammad Mukaddes",
+          venue: "Under Review"
+        },
+        {
+          title: "Digital Twin-Driven Pavement Health Monitoring and Maintenance Optimization Using Graph Neural Networks",
+          authors: "Mohsin Mahmud Topu, Mahfuz Ahmed Anik, Azmine Toushik Wasi, Md Manjurul Ahsan",
+          venue: "arXiv Preprint",
+          links: [
+            { name: "Arxiv", url: "https://arxiv.org/abs/2511.02957" }
+          ]
+        }
+      ];
+
+      const PUBLICATIONS_PROGRESS: string[] = [
+        "SleepSense: Predicting and Optimizing Sleep Quality Using Machine Learning",
+        "Digital Twin–Enabled Additive Manufacturing: A Systematic Review of Architectures, Integration Layers, and Operational Maturity",
+        "Examining Graph Neural Networks Capabilities in Binder Affinity Prediction"
+      ];
+
+      const PROJECTS: ProjectItem[] = [
+        { 
+          title: "Simulation of a Super Shop Using Arena Simulation Software", 
+          description: "The project simulated the Masala Bazar Super Shop using Arena software to assess efficiency. The model, run for 10 replications of 24 hours, showed that an average of 150 customers were served. The main bottleneck was identified at Sales Man 2 (Query for life style), which had the highest utilization (29.85%) and the longest average queue waiting time (1.5949 minutes). The total time required for a customer in the system averaged 11.6351 minutes.",
+          imageUrl: "./unnamed (5).jpg", 
+          icon: "fa-solid fa-desktop"
+        },
+        { 
+          title: "Operations Management in a Retail Shop", 
+          description: "This project optimized the inventory management of soybean oil for Retailer 'X' by replacing the fixed-order system with a Quantity Discount Model. The analysis determined that ordering 161 cartons every 27 days is the optimal strategy, compared to the previous 50 cartons every 7-10 days. This adjustment reduced total monthly costs by 1,027 Tk and established a Reorder Point of 8 units to ensure a 95% service level against stockouts.",
+          imageUrl: "./unnamed (7).png", 
+          icon: "fa-solid fa-chart-line"
+        },
+        { 
+          title: "Design and Development of SUST Logo using Laser Beam Machining (LBM)", 
+          description: "This project employs Laser Beam Machining (LBM) to fabricate a detailed SUST logo, aiming to demonstrate the technology's precision and ability to produce intricate designs with high-quality finishes. It further evaluates the output's accuracy and consistency to validate LBM's effectiveness for high-precision industrial applications.",
+          imageUrl: "./WhatsApp Image 2025-11-30 at 14.20.38_b68ecc02.jpg", 
+          icon: "fa-solid fa-compass-drafting"
+        },
+        { 
+          title: "Eco-Friendly Water Bottle", 
+          description: "This project focused on designing and prototyping an eco-friendly water bottle using Bambusa polymorpha bamboo to provide a sustainable alternative to single-use plastics. Through a systematic product design process including concept screening and 3D modeling, the team fabricated a physical prototype with a calculated mass-production cost of 75 BDT per unit. Despite limitations such as the lack of food-grade coating, the project demonstrated the product's potential as a cost-effective and environmentally friendly solution for the local market.",
+          imageUrl: "./ec.jpg", 
+          icon: "fa-solid fa-leaf"
+        }
+      ];
+
+      const SKILLS = {
+        "Languages": ["Python", "C", "MATLAB"],
+        "DS & ML Tools (Python)": ["NumPy", "Pandas", "Matplotlib", "Seaborn", "Scikit-learn", "TensorFlow", "PyTorch", "LangChain", "CrewAI"],
+        "Data Science Techniques": ["EDA", "Experiment Design", "Hypothesis Testing", "Sampling", "Data-Driven Decision Making"],
+        "Machine Learning Techniques": [
+          "Statistical ML Methods", "Deep Learning", "NLP", "Computer Vision", 
+          "Graph Neural Networks (GNNs)", "Agentic Decision-Making", "Agentic LLMs", 
+          "AI Reasoning", "RAG"
+        ],
+        "Operations Research & Optimization": [
+          "LP", "NLP", "MILP", "Convex Optimization", "Discrete Optimization", 
+          "Simulation Modeling", "Gurobi"
+        ]
+      };
+
+      const ACHIEVEMENTS: AchievementItem[] = [
+        { 
+          title: "3rd Place at QCRE Data Challenge Competition", 
+          detail: "2025 IISE Annual Conference & Expo",
+          url: "https://www.linkedin.com/posts/mahfuz-ahmed-anik-a5a6b5215_iise2025-qcre-datachallenge-activity-7354905916263055360-czVe/?utm_source=share&utm_medium=member_desktop&rcm=ACoAADZi-qYBuXVSf_IKahLDE_CBeVOO01m_7VU"
+        },
+        { title: "Champion at Inter-Department Business Case Competition", detail: "IPE Association" },
+        { title: "Won 70% scholarship in ISCEA Global Supply Chain Case Competition 2023" },
+        { title: "2nd Runners Up, Sylhet Division Math Olympiad 2019", detail: "Qualified for National Round" },
+        { title: "9th Place, Sylhet Division Science Olympiad 2019" },
+      ];
+
+      const TRAINING: TrainingItem[] = [
+        {
+          name: "Deep Learning (Interactive Track, 68 hours) – Neuromatch Academy, July 2025",
+          url: "https://portal.neuromatchacademy.org/certificate/19955245-5f10-48c6-b554-53fca61475ab"
+        },
+        { name: "Industrial Training – Bangladesh Industrial Technical Assistance Center (BITAC), Chittagong" },
+        { name: "Winter ML Bootcamp – Computational Intelligence and Operations Lab (CIOL)" },
+        { name: "Data Analyst in Python – Datacamp" },
+        { name: "Supervised Machine Learning: Regression and Classification – Coursera" }
+      ];
+
+      // ==========================================
+      // COMPONENTS
+      // ==========================================
+      
+      const SocialBadge: React.FC<{ link: SocialLink }> = ({ link }) => {
+        return (
+          <a
+            href={link.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`
+              inline-flex items-center gap-2 px-3 py-1.5 rounded-md
+              text-xs font-semibold text-white
+              transition-all duration-200 transform hover:-translate-y-0.5 hover:brightness-110 shadow-sm
+              ${link.color}
+            `}
+          >
+            <i className={link.icon}></i>
+            <span>{link.name}</span>
+          </a>
+        );
+      };
+
+      const HighlightAuthor: React.FC<{ text: string }> = ({ text }) => {
+        const name = "Mahfuz Ahmed Anik";
+        const parts = text.split(new RegExp(`(${name})`, 'g'));
+        
+        return (
+          <span className="text-slate-600">
+            {parts.map((part, i) => (
+              part === name ? 
+              <span key={i} className="font-bold underline text-slate-800">{part}</span> : 
+              <span key={i}>{part}</span>
+            ))}
+          </span>
+        );
+      };
+
+      const PublicationEntry: React.FC<{ pub: PublicationItem }> = ({ pub }) => {
+        return (
+          <li className="mb-6 last:mb-0">
+             <div className="flex gap-2 items-start">
+               <div className="flex-1">
+                 <h4 className="text-lg font-bold text-slate-900 leading-snug mb-1">
+                   {pub.title}
+                 </h4>
+                 <div className="text-sm leading-relaxed mb-1">
+                   <HighlightAuthor text={pub.authors} />
+                 </div>
+                 <div className="text-sm text-slate-500 mb-2">
+                   {pub.venue && <span className="font-bold text-slate-700">{pub.venue}</span>}
+                   {pub.note && <span className="block mt-0.5 text-slate-600"><i className="fa-solid fa-trophy text-amber-500 mr-1.5"></i>{pub.note}</span>}
+                 </div>
+                 
+                 {pub.links && pub.links.length > 0 && (
+                   <div className="flex flex-wrap gap-2 mt-2">
+                     {pub.links.map((link, idx) => (
+                       <a 
+                        key={idx} 
+                        href={link.url} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 px-2 py-0.5 text-xs font-medium text-blue-700 bg-blue-50 border border-blue-100 rounded hover:bg-blue-100 transition-colors"
+                       >
+                         [{link.name}]
+                       </a>
+                     ))}
+                   </div>
+                 )}
+               </div>
+             </div>
+          </li>
+        );
+      };
+
+      const ProjectCard: React.FC<{ project: ProjectItem; index: number }> = ({ project, index }) => {
+        return (
+          <div className="flex flex-col lg:flex-row gap-8 items-center mb-16 last:mb-0">
+            {/* Text Side */}
+            <div className="flex-1 order-2 lg:order-1">
+              <div className="flex items-center gap-4 mb-4">
+                <span className="text-4xl font-black text-slate-200">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+                <div className="h-px bg-slate-200 flex-1"></div>
+                <div className="w-10 h-10 rounded-full bg-purple-50 flex items-center justify-center text-purple-600 shrink-0 border border-purple-100">
+                  <i className={`${project.icon} text-lg`}></i>
+                </div>
+              </div>
+              <h3 className="text-2xl font-bold text-slate-900 mb-4 font-serif">
+                {project.title}
+              </h3>
+              <p className="text-slate-600 leading-relaxed text-justify text-base">
+                {project.description}
+              </p>
+            </div>
+            
+            {/* Image Side */}
+            <div className="w-full lg:w-2/5 order-1 lg:order-2">
+               <div className="rounded-xl overflow-hidden shadow-lg border border-slate-100 group bg-white relative">
+                  <div className="absolute inset-0 bg-slate-900/0 group-hover:bg-slate-900/5 transition-colors z-10 pointer-events-none"></div>
+                  <img 
+                    src={project.imageUrl} 
+                    alt={project.title} 
+                    className="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105" 
+                  />
+               </div>
+            </div>
+          </div>
+        );
+      };
+
+      const ResearchCard: React.FC<{ interest: ResearchInterest }> = ({ interest }) => {
+        return (
+          <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-6 hover:shadow-md transition-shadow duration-300">
+            <div className="flex items-center gap-4 mb-4">
+              <div className="w-12 h-12 rounded-lg bg-blue-50 flex items-center justify-center shrink-0 text-blue-600">
+                <i className={`${interest.icon} text-xl`}></i>
+              </div>
+              <h3 className="font-serif text-xl font-bold text-slate-800 leading-tight">
+                {interest.title}
+              </h3>
+            </div>
+            <ul className="space-y-3">
+              {interest.description.map((item, idx) => (
+                <li key={idx} className="flex gap-3 text-slate-600 text-sm leading-relaxed text-justify">
+                  <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-400 shrink-0"></span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        );
+      };
+
+      const Navbar: React.FC = () => {
+        const [isOpen, setIsOpen] = useState(false);
+        const [scrolled, setScrolled] = useState(false);
+        const navLinks = [
+          { name: 'About', href: '#about' },
+          { name: 'Research', href: '#research' },
+          { name: 'Experience', href: '#experience' },
+          { name: 'Publications', href: '#publications' },
+          { name: 'Education', href: '#education' },
+          { name: 'Projects', href: '#projects' },
+          { name: 'Skills', href: '#skills' },
+          { name: 'Awards', href: '#achievements' },
+        ];
+
+        useEffect(() => {
+          const handleScroll = () => {
+            setScrolled(window.scrollY > 20);
+          };
+          window.addEventListener('scroll', handleScroll);
+          return () => window.removeEventListener('scroll', handleScroll);
+        }, []);
+
+        const handleClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+          e.preventDefault();
+          setIsOpen(false);
+          const element = document.querySelector(href);
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+          }
+        };
+
+        return (
+          <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-200 py-2' : 'bg-white py-4 border-b border-transparent'}`}>
+            <div className="max-w-6xl mx-auto px-6 flex justify-between items-center">
+              <a 
+                href="#" 
+                onClick={(e) => handleClick(e, '#about')}
+                className="font-serif font-bold text-xl text-slate-900 tracking-tight"
+              >
+                Portfolio<span className="text-blue-600">.</span>
+              </a>
+
+              {/* Desktop Menu */}
+              <div className="hidden md:flex items-center gap-8">
+                {navLinks.map((link) => (
+                  <a
+                    key={link.name}
+                    href={link.href}
+                    onClick={(e) => handleClick(e, link.href)}
+                    className="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors relative group"
+                  >
+                    {link.name}
+                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all group-hover:w-full"></span>
+                  </a>
+                ))}
+              </div>
+
+              {/* Mobile Toggle */}
+              <button 
+                className="md:hidden text-slate-700 focus:outline-none p-2"
+                onClick={() => setIsOpen(!isOpen)}
+              >
+                <i className={`fa-solid ${isOpen ? 'fa-xmark' : 'fa-bars'} text-xl`}></i>
+              </button>
+            </div>
+
+            {/* Mobile Menu */}
+            {isOpen && (
+              <div className="md:hidden bg-white border-t border-slate-100 absolute w-full shadow-lg">
+                <div className="flex flex-col p-4 space-y-3">
+                  {navLinks.map((link) => (
+                    <a
+                      key={link.name}
+                      href={link.href}
+                      onClick={(e) => handleClick(e, link.href)}
+                      className="text-slate-600 hover:text-blue-600 font-medium py-2 px-4 rounded-lg hover:bg-slate-50"
+                    >
+                      {link.name}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
+          </nav>
+        );
+      };
+
+      const Footer: React.FC = () => {
+        return (
+          <footer className="bg-slate-900 text-slate-400 py-12 border-t border-slate-800 mt-20">
+            <div className="max-w-6xl mx-auto px-6 text-center">
+              <div className="flex justify-center gap-6 mb-8">
+                 <a href="https://github.com/ono1025" className="hover:text-white transition-colors"><i className="fa-brands fa-github text-2xl"></i></a>
+                 <a href="https://www.linkedin.com/in/mahfuz-ahmed-anik-a5a6b5215/" className="hover:text-white transition-colors"><i className="fa-brands fa-linkedin text-2xl"></i></a>
+                 <a href="mailto:mahfuzahmedanik1025@gmail.com" className="hover:text-white transition-colors"><i className="fa-solid fa-envelope text-2xl"></i></a>
+              </div>
+              <p className="text-sm mb-2">
+                &copy; {new Date().getFullYear()} Mahfuz Ahmed Anik. All rights reserved.
+              </p>
+              <p className="text-xs text-slate-600">
+              </p>
+            </div>
+          </footer>
+        );
+      };
+
+      const App: React.FC = () => {
+        return (
+          <div className="min-h-screen font-sans">
+            <Navbar />
+
+            <main className="pt-24 md:pt-32">
+              {/* Hero / About Section */}
+              <section id="about" className="max-w-6xl mx-auto px-6 mb-20">
+                <div className="flex flex-col md:flex-row gap-12 items-start">
+                  
+                  <div className="flex-1 order-2 md:order-1">
+                    <div className="mb-6">
+                      <h1 className="font-serif text-4xl md:text-5xl font-bold text-slate-900 mb-2">
+                        Mahfuz Ahmed Anik
+                      </h1>
+                      <p className="text-xl text-blue-600 font-medium">
+                        Aspiring Researcher and Graduate Engineering Student
+                      </p>
+                    </div>
+
+                    <div className="prose prose-slate max-w-none text-slate-600 leading-relaxed text-justify space-y-4">
+                      <p>
+                        I am <strong>Mahfuz Ahmed Anik</strong>, a recent graduate of Industrial and Production Engineering at 
+                        <span className="font-semibold text-slate-800"> Shahjalal University of Science and Technology (SUST)</span> with a CGPA of 3.80/4.00 (3rd position in Class). 
+                        I have a strong foundation in operation Research, supply chain management, data science, and AI/ML, 
+                        which shaped my research journey. My research is dedicated to developing human-centric, safe, and reliable models for healthcare, transportation,
+                        clinical applications, and process optimization. My research interests lie at the intersection of 
+                        Artificial Intelligence, Data-Driven learning under uncertainty and Optimization, focusing in healthcare, 
+                        additive manufacturing, supply chain optimization and transportation. I am also curious about Graph Machine Learning (GNNs) 
+                        and Agentic AI frameworks. 
+                      </p>
+                      
+                      <p className="font-medium text-blue-800 bg-blue-50 p-3 rounded-md border-l-4 border-blue-500">
+                        Currently, I am actively seeking a PhD position to begin in Fall 2026 to further my research in this domain.
+                      </p>
+
+                      <p>
+                        I started my research journey under <a href="https://scholar.google.com/citations?user=HOOJPRYAAAAJ&hl=en" target="_blank" rel="noreferrer" className="font-medium text-slate-900 underline decoration-slate-300 hover:text-blue-600 hover:decoration-blue-600 transition-colors">Prof. A.M.M. Mukaddes (SUST)</a> in data science and operations research and I completed my undergraduate thesis under <a href="https://www.sust.edu/departments/ipe/faculty/karim-ipe@sust.edu" target="_blank" rel="noreferrer" className="font-medium text-slate-900 underline decoration-slate-300 hover:text-blue-600 hover:decoration-blue-600 transition-colors">Prof. Mohammed Abdul Karim (SUST)</a>
+                        Later, after joining <a href="https://ciol-researchlab.github.io/" target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">CIOL research lab</a>, I had the privilege to collaborate with <a href="https://scholar.google.com/citations?user=fvWTiS8AAAAJ&hl=en" target="_blank" rel="noreferrer" className="font-medium text-slate-900 underline decoration-slate-300 hover:text-blue-600 hover:decoration-blue-600 transition-colors">Prof. Ahsan (OU)</a> and <a href="https://www.lsu.edu/eng/mie/people/faculty/bappy.php" target="_blank" rel="noreferrer" className="font-medium text-slate-900 underline decoration-slate-300 hover:text-blue-600 hover:decoration-blue-600 transition-colors">Prof. Bappy (LSU)</a> on digital twins, additive manufacturing, GNNs, and Agentic AI for industrial and medical applications. 
+                        I also work with <a href="https://riashat.github.io/" target="_blank" rel="noreferrer" className="font-medium text-slate-900 underline decoration-slate-300 hover:text-blue-600 hover:decoration-blue-600 transition-colors">Riashat Islam, PhD (Microsoft Research)</a> and <a href="https://scholar.google.com/citations?user=KhC8rtcAAAAJ&hl=en" target="_blank" rel="noreferrer" className="font-medium text-slate-900 underline decoration-slate-300 hover:text-blue-600 hover:decoration-blue-600 transition-colors">Md Rizwan Parvez, PhD (QCRI)</a> on generative AI, agents, and reasoning. 
+                        Outside CIOL, I also collaborate with <a href="https://www.ai4chemia.org/about" target="_blank" rel="noreferrer" className="font-medium text-slate-900 underline decoration-slate-300 hover:text-blue-600 hover:decoration-blue-600 transition-colors">Prof. Alshehri (KSU)</a> on generative AI and uncertainty modeling in chemical substances.
+                      </p>
+                      
+                      <p>
+                        My research has been published in workshop venues associated with <strong>ICLR, ACL, NAACL, and CSCW</strong>. Several of my 
+                        journal submissions under review in peer-reviewed journal and I am engaged in multiple ongoing projects. I am a quick learner and highly adaptable, capable of working both independently and in teams. I enjoy exploring new topics, sharing knowledge, honing my skills, and pushing my limits through experimentation.
+                      </p>
+                      
+                      <p>
+                        <a href="https://ono1025.github.io/CV/CV.pdf" target="_blank" rel="noreferrer" className="inline-flex items-center text-blue-600 font-bold hover:underline">
+                          View my Curriculum Vitae <i className="fa-solid fa-arrow-right ml-1 text-xs"></i>
+                        </a>
+                      </p>
+                      
+                      <p className="text-sm text-slate-500 italic">
+                        Feel free to email me (mahfuzahmedanik1025 at gmail dot com) if you're interested in collaboration or discussing research. I'm open to new ideas and collaborations.
+                      </p>
+                    </div>
+
+                    {/* Social Links */}
+                    <div className="mt-8">
+                      <h3 className="text-xs uppercase tracking-wider text-slate-400 font-bold mb-3">Connect</h3>
+                      <div className="flex flex-wrap gap-2">
+                        {SOCIAL_LINKS.map((link) => (
+                          <SocialBadge key={link.name} link={link} />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="order-1 md:order-2 w-full md:w-60 shrink-0 mx-auto md:mx-0">
+                    <div className="aspect-[3/4] rounded-2xl overflow-hidden shadow-xl border-4 border-white bg-slate-200 relative group">
+                      <img 
+                        src="./Anik.png" 
+                        alt="Mahfuz Ahmed Anik" 
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent"></div>
+                    </div>
+                  </div>
+
+                </div>
+              </section>
+
+              <div className="bg-slate-100 h-px w-full max-w-6xl mx-auto my-12"></div>
+
+              {/* Research Interests */}
+              <section id="research" className="max-w-6xl mx-auto px-6 py-8">
+                <div className="flex items-center gap-3 mb-10">
+                  <div className="bg-blue-600 w-1 h-8 rounded-full"></div>
+                  <h2 className="font-serif text-3xl font-bold text-slate-900">Research Interests</h2>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {RESEARCH_INTERESTS.map((interest, idx) => (
+                    <ResearchCard key={idx} interest={interest} />
+                  ))}
+                </div>
+              </section>
+
+              {/* Experience Section */}
+              <section id="experience" className="max-w-6xl mx-auto px-6 py-12 bg-white rounded-3xl my-12 border border-slate-100 shadow-sm">
+                <div className="flex items-center gap-3 mb-10">
+                   <div className="bg-amber-500 w-1 h-8 rounded-full"></div>
+            <h2 className="font-serif text-3xl font-bold text-slate-900">Experience</h2>
+                </div>
+
+                <div className="space-y-12">
+                  {EXPERIENCE.map((exp, idx) => (
+                    <div key={idx} className="relative pl-8 md:pl-0">
+                      <div className="md:flex gap-6 justify-between group">
+                        {/* Timeline Line (Desktop) */}
+                        <div className="hidden md:block absolute left-[180px] top-2 bottom-0 w-px bg-slate-200 group-last:bg-transparent"></div>
+                        <div className="hidden md:block absolute left-[176px] top-2.5 w-2.5 h-2.5 rounded-full bg-slate-300 ring-4 ring-white group-hover:bg-blue-500 transition-colors"></div>
+
+                        {/* Date */}
+                        <div className="md:w-[160px] shrink-0 text-sm font-semibold text-slate-500 uppercase tracking-wide mb-1 md:mb-0 md:text-right">
+                          {exp.period}
+                        </div>
+
+                        {/* Content */}
+                        <div className="md:flex-1 md:pl-10">
+                          <h3 className="text-xl font-bold text-slate-800">{exp.role}</h3>
+                          <div className="text-blue-600 font-medium mb-3">
+                            {exp.orgUrl ? (
+                              <a href={exp.orgUrl} target="_blank" rel="noopener noreferrer" className="hover:underline">
+                                {exp.organization} <i className="fa-solid fa-arrow-up-right-from-square text-xs ml-1"></i>
+                              </a>
+                            ) : (
+                              exp.organization
+                            )}
+                          </div>
+                          <p className="text-slate-600 leading-relaxed text-sm md:text-base text-justify">
+                            {exp.description}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+
+              {/* Publications */}
+              <section id="publications" className="max-w-6xl mx-auto px-6 py-8">
+                <div className="flex items-center gap-3 mb-10">
+                  <div className="bg-emerald-500 w-1 h-8 rounded-full"></div>
+                  <h2 className="font-serif text-3xl font-bold text-slate-900">Publications</h2>
+                </div>
+
+                <div className="space-y-12">
+                  {/* Journal */}
+                  <div>
+                    <h3 className="font-serif text-xl font-bold text-slate-900 border-b border-slate-200 pb-2 mb-6 flex items-center gap-2">
+                       <i className="fa-solid fa-book-journal-whills text-emerald-600"></i> Journal
+                    </h3>
+                    <ol className="list-decimal pl-5 space-y-6 marker:text-slate-400 marker:font-medium">
+                      {PUBLICATIONS_JOURNAL.map((pub, idx) => (
+                        <PublicationEntry key={idx} pub={pub} />
+                      ))}
+                    </ol>
+                  </div>
+
+                  {/* Conference */}
+                  <div>
+                    <h3 className="font-serif text-xl font-bold text-slate-900 border-b border-slate-200 pb-2 mb-6 flex items-center gap-2">
+                       <i className="fa-solid fa-users-rectangle text-blue-600"></i> Conference Paper
+                    </h3>
+                    <ol className="list-decimal pl-5 space-y-6 marker:text-slate-400 marker:font-medium">
+                      {PUBLICATIONS_CONFERENCE.map((pub, idx) => (
+                        <PublicationEntry key={idx} pub={pub} />
+                      ))}
+                    </ol>
+                  </div>
+
+                  {/* Workshop */}
+                  <div>
+                    <h3 className="font-serif text-xl font-bold text-slate-900 border-b border-slate-200 pb-2 mb-6 flex items-center gap-2">
+                       <i className="fa-solid fa-chalkboard-user text-purple-600"></i> Workshop Paper
+                    </h3>
+                    <ol className="list-decimal pl-5 space-y-6 marker:text-slate-400 marker:font-medium">
+                      {PUBLICATIONS_WORKSHOP.map((pub, idx) => (
+                        <PublicationEntry key={idx} pub={pub} />
+                      ))}
+                    </ol>
+                  </div>
+
+                  {/* Poster */}
+                  <div>
+                    <h3 className="font-serif text-xl font-bold text-slate-900 border-b border-slate-200 pb-2 mb-6 flex items-center gap-2">
+                       <i className="fa-solid fa-image text-rose-500"></i> Poster Paper
+                    </h3>
+                    <ol className="list-decimal pl-5 space-y-6 marker:text-slate-400 marker:font-medium">
+                      {PUBLICATIONS_POSTER.map((pub, idx) => (
+                        <PublicationEntry key={idx} pub={pub} />
+                      ))}
+                    </ol>
+                  </div>
+
+                  {/* In Review */}
+                  <div>
+                    <h3 className="font-serif text-xl font-bold text-slate-900 border-b border-slate-200 pb-2 mb-6 flex items-center gap-2">
+                       <i className="fa-solid fa-file-pen text-amber-500"></i> Works In Review
+                    </h3>
+                    <ol className="list-decimal pl-5 space-y-6 marker:text-slate-400 marker:font-medium">
+                      {PUBLICATIONS_REVIEW.map((pub, idx) => (
+                        <PublicationEntry key={idx} pub={pub} />
+                      ))}
+                    </ol>
+                  </div>
+
+                  {/* In Progress */}
+                  <div>
+                    <h3 className="font-serif text-xl font-bold text-slate-900 border-b border-slate-200 pb-2 mb-6 flex items-center gap-2">
+                       <i className="fa-solid fa-bars-progress text-slate-500"></i> Work In Progress
+                    </h3>
+                    <ol className="list-decimal pl-5 space-y-4 marker:text-slate-400 marker:font-medium">
+                      {PUBLICATIONS_PROGRESS.map((item, idx) => (
+                        <li key={idx} className="text-slate-700 font-medium">
+                          {item}
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
+                </div>
+              </section>
+
+              {/* Education Section (NEW) */}
+              <section id="education" className="max-w-6xl mx-auto px-6 py-8">
+                <div className="flex items-center gap-3 mb-10">
+                  <div className="bg-teal-500 w-1 h-8 rounded-full"></div>
+                  <h2 className="font-serif text-3xl font-bold text-slate-900">Education</h2>
+                </div>
+                
+                <div className="space-y-8">
+                  {EDUCATION.map((edu, idx) => (
+                    <div key={idx} className="bg-white border border-slate-100 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                      <div className="flex flex-col md:flex-row justify-between md:items-start gap-2 mb-2">
+                        <div>
+                          <h3 className="text-xl font-bold text-slate-900">{edu.degree}</h3>
+                          <p className="text-blue-600 font-medium">{edu.institution}</p>
+                        </div>
+                        <span className="inline-block bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide whitespace-nowrap">
+                          {edu.period}
+                        </span>
+                      </div>
+                      
+                      <div className="flex flex-wrap gap-3 items-center mb-4 text-sm text-slate-600">
+                         {edu.major && <span className="font-semibold"><i className="fa-solid fa-book-open mr-1.5"></i>{edu.major}</span>}
+                         {edu.major && edu.result && <span className="text-slate-300">•</span>}
+                         {edu.result && <span className="font-semibold text-emerald-600"><i className="fa-solid fa-star mr-1.5"></i>{edu.result}</span>}
+                      </div>
+
+                      {edu.courses && (
+                        <div className="mt-4 pt-4 border-t border-slate-50">
+                          <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Relevant Coursework</p>
+                          <p className="text-sm text-slate-600 leading-relaxed text-justify">
+                            {edu.courses}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </section>
+
+              {/* Grid for Projects & Skills */}
+              <div className="max-w-6xl mx-auto px-6 py-12 grid grid-cols-1 gap-12">
+                
+                {/* Projects */}
+                <section id="projects">
+                  <div className="flex items-center gap-3 mb-12">
+                    <div className="bg-purple-500 w-1 h-8 rounded-full"></div>
+                    <h2 className="font-serif text-3xl font-bold text-slate-900">Academic Projects</h2>
+                  </div>
+                  <div>
+                    {PROJECTS.map((proj, idx) => (
+                      <ProjectCard key={idx} project={proj} index={idx} />
+                    ))}
+                  </div>
+                </section>
+
+                {/* Skills */}
+                <section id="skills" className="mt-12">
+                  <div className="flex items-center gap-3 mb-8">
+                    <div className="bg-rose-500 w-1 h-8 rounded-full"></div>
+                    <h2 className="font-serif text-3xl font-bold text-slate-900">Technical Skills</h2>
+                  </div>
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {Object.entries(SKILLS).map(([category, items]) => (
+                      <div key={category} className="bg-white p-6 rounded-xl border border-slate-100 shadow-sm">
+                        <h4 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4 border-b border-slate-100 pb-2">{category}</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {items.map(skill => (
+                            <span key={skill} className="bg-slate-50 text-slate-700 px-3 py-1.5 rounded-md text-sm font-medium border border-slate-200 hover:bg-white hover:border-slate-300 transition-all">
+                              {skill}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+
+              </div>
+
+              {/* Achievements & Training */}
+              <section id="achievements" className="max-w-6xl mx-auto px-6 py-8">
+                 <div className="grid md:grid-cols-2 gap-12">
+                   
+                   {/* Achievements */}
+                   <div className="bg-slate-900 text-slate-200 rounded-2xl p-8 relative overflow-hidden">
+                     <div className="absolute top-0 right-0 p-12 opacity-5">
+                       <i className="fa-solid fa-trophy text-9xl"></i>
+                     </div>
+                     <h2 className="font-serif text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                       <i className="fa-solid fa-award text-yellow-500"></i> Achievements
+                     </h2>
+                     <ul className="space-y-4">
+                       {ACHIEVEMENTS.map((ach, idx) => (
+                         <li key={idx} className="border-b border-slate-700 pb-3 last:border-0 last:pb-0">
+                           <p className="font-bold text-white">
+                             {ach.url ? (
+                               <a href={ach.url} target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 hover:underline">
+                                 {ach.title} <i className="fa-solid fa-arrow-up-right-from-square text-xs ml-1 opacity-70"></i>
+                               </a>
+                             ) : ach.title}
+                           </p>
+                           {ach.detail && <p className="text-sm text-slate-400 mt-1">{ach.detail}</p>}
+                         </li>
+                       ))}
+                     </ul>
+                   </div>
+
+                   {/* Training */}
+                   <div className="bg-white border border-slate-200 rounded-2xl p-8">
+                     <h2 className="font-serif text-2xl font-bold text-slate-900 mb-6 flex items-center gap-3">
+                       <i className="fa-solid fa-certificate text-blue-500"></i> Certifications & Training
+                     </h2>
+                     <ul className="space-y-4">
+                       {TRAINING.map((train, idx) => (
+                         <li key={idx} className="flex gap-3 text-slate-700 text-sm">
+                            <i className="fa-solid fa-check text-green-500 mt-1 shrink-0"></i>
+                            <span>
+                              {train.url ? (
+                                <a href={train.url} target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 hover:underline font-medium">
+                                  {train.name} <i className="fa-solid fa-arrow-up-right-from-square text-xs ml-1 opacity-70"></i>
+                                </a>
+                              ) : train.name}
+                            </span>
+                         </li>
+                       ))}
+                     </ul>
+                   </div>
+
+                 </div>
+              </section>
+
+            </main>
+
+            <Footer />
+          </div>
+        );
+      };
+
+      const rootElement = document.getElementById('root');
+      const root = ReactDOM.createRoot(rootElement);
+      root.render(
+        <React.StrictMode>
+          <App />
+        </React.StrictMode>
+      );
+    </script>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>
